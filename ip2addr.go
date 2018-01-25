@@ -7,12 +7,11 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"time"
 )
 
 type CacheDriver interface {
-	Set(ip string, lo *Location)
-	Get(ip string) *Location
+	SetLocation(ip string, lo *Location)
+	GetLocation(ip string) *Location
 }
 
 //还要集成Redis
@@ -28,10 +27,8 @@ type Location struct {
 type locationFetcher func(string) (*Location, error)
 
 type IpParser struct {
-	Handlers        []locationFetcher
-	CacheExpireTime time.Duration
-	CackeKey        string
-	Store           CacheDriver
+	Handlers []locationFetcher
+	Store    CacheDriver
 }
 
 func (parser *IpParser) FetchIpAddress(ip string) (*Location, error) {
@@ -44,14 +41,14 @@ func (parser *IpParser) FetchIpAddress(ip string) (*Location, error) {
 		return nil, errors.New("ip string is invalid!")
 	}
 
-	if lo := parser.Store.Get(ip); lo != nil {
+	if lo := parser.Store.GetLocation(ip); lo != nil {
 		return lo, nil
 	}
 
 	for _, f := range parser.Handlers {
 		lo, err := f(ip)
 		if err == nil {
-			parser.Store.Set(ip, lo)
+			parser.Store.SetLocation(ip, lo)
 			return lo, nil
 		}
 	}
