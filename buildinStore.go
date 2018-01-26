@@ -85,7 +85,6 @@ func (s *memoryStore) GetLocation(id string) (value *Location) {
 	// When we don't need to clear captcha, acquire read lock.
 	s.RLock()
 	defer s.RUnlock()
-
 	value, ok := s.digitsById[id]
 	if !ok {
 		log.Print("ip2location buildin store read failed.")
