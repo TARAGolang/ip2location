@@ -37,3 +37,9 @@ func TestIpParser_FetchIpAddress(t *testing.T) {
 	log.Print(loc)
 
 }
+
+func TestFecherGeoIp(t *testing.T) {
+
+	loc, _ := fetcherGeoip("8.8.8.8")
+	t.Log(loc)
+}

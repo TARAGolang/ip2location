@@ -21,7 +21,7 @@ import (
 
 func TestSetGet(t *testing.T) {
 	s := NewMemoryStore(1024*1024*1024, time.Hour*24*365*10)
-	s.SetLocation("8.8.8.8", &Location{"中国", "湖北", "武汉", "电信"})
+	s.SetLocation("8.8.8.8", &Location{"中国", "湖北", "武汉", "电信", 0.23, 2.3, "time"})
 
 	loc := s.GetLocation("8.8.8.8")
 	t.Log(loc)
